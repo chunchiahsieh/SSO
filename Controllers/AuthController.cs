@@ -9,6 +9,7 @@ using SSO.Models; //  確保導入模型
 using SSO.DTO;
 using SSO.Data;
 using Microsoft.EntityFrameworkCore;
+using SSO.Helper;
 
 namespace SSO.Controllers
 {
@@ -30,39 +31,21 @@ namespace SSO.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDTO model)
         {
-            if (_dbContext.Users.Any(u => u.UserId == model.UserId && u.SystemName == model.SystemName))
-                return BadRequest("SystemName:{model.SystemName}/Username:{model.UserName} already exists");
+            if (_dbContext.Users.Any(u => u.UserId == model.UserId))
+                return BadRequest("Username:{model.UserName} already exists");
 
             var user = new Users
             {
                 UserId = model.UserId,
-                SystemName = model.SystemName,
                 UserName = model.UserName,
                 IsDeleted = false,
-                PasswordHash = PasswordHelper.HashPassword(model.Password),
+                PasswordHash = SSO.Helper.PasswordHelper.HashPassword(model.Password),
             };
 
             _dbContext.Users.Add(user);
             await _dbContext.SaveChangesAsync();
 
             return Ok(new { message = "User registered successfully!" });
-        }
-
-        public static class PasswordHelper
-        {
-            public static string HashPassword(string password)
-            {
-                using (var sha256 = System.Security.Cryptography.SHA256.Create())
-                {
-                    var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-                    return Convert.ToBase64String(hashedBytes);
-                }
-            }
-
-            public static bool VerifyPassword(string password, string hashedPassword)
-            {
-                return HashPassword(password) == hashedPassword;
-            }
         }
 
         [HttpGet("check-userid")]
@@ -83,7 +66,7 @@ namespace SSO.Controllers
         {
 
             var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.UserId == model.UserId);
-            if (user == null || !PasswordHelper.VerifyPassword(model.Password, user.PasswordHash))
+            if (user == null || !SSO.Helper.PasswordHelper.VerifyPassword(model.Password, user.PasswordHash))
                 return Unauthorized("Invalid username or password");
 
             var token = GenerateJwtToken(user);
@@ -148,8 +131,6 @@ namespace SSO.Controllers
                 new Claim("id", user.Id.ToString()),
                 new Claim("userid", user.UserId),
                 new Claim("username", user.UserName),
-                new Claim("system", user.SystemName ?? ""), 
-                new Claim("userRoles", rolesString), // 存角色字串
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()) // JWT 唯一識別碼
             };
 

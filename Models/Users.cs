@@ -15,8 +15,6 @@ namespace SSO.Models
         [Required]
         public string PasswordHash { get; set; }
 
-        [Required]
-        public string SystemName { get; set; }
 
         public bool IsDeleted { get; set; } = false;
 

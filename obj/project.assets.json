@@ -5106,11 +5106,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Disk F\\Aga\\VSCode AI\\SSO\\SSO.csproj",
+      "projectUniqueName": "C:\\Disk F\\Aga\\SSO\\SSO.csproj",
       "projectName": "SSO",
-      "projectPath": "C:\\Disk F\\Aga\\VSCode AI\\SSO\\SSO.csproj",
+      "projectPath": "C:\\Disk F\\Aga\\SSO\\SSO.csproj",
       "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-      "outputPath": "C:\\Disk F\\Aga\\VSCode AI\\SSO\\obj\\",
+      "outputPath": "C:\\Disk F\\Aga\\SSO\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

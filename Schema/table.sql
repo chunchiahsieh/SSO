@@ -4,8 +4,7 @@ use SSO
 CREATE TABLE [dbo].[Users] (
     [Id] INT IDENTITY(1,1) NOT NULL,
     [UserId] NVARCHAR(255) NOT NULL UNIQUE,  -- ✅ 唯一用戶識別
-    [SystemName] VARCHAR(50) NOT NULL,  -- ✅ 用來區分不同系統
-    [Username] NVARCHAR(255) NOT NULL UNIQUE, 
+    [UserName] NVARCHAR(255) NOT NULL UNIQUE, 
     [PasswordHash] NVARCHAR(255) NOT NULL,
     [CreatedAt] DATETIME DEFAULT GETDATE(),
     [CreatedBy] INT NULL,
@@ -33,7 +32,7 @@ CREATE TABLE [dbo].[Roles] (
 
 -- 🔹 UserRoles Table (多對多關係)
 CREATE TABLE [dbo].[UserRoles] (
-    [Username] NVARCHAR(255) NOT NULL,
+    [UserId] NVARCHAR(255) NOT NULL,
     [RoleId] INT NOT NULL,
     [CreatedAt] DATETIME DEFAULT GETDATE(),
     [CreatedBy] INT NULL,
