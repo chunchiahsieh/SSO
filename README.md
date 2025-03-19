@@ -44,3 +44,6 @@ appsettings.json檔案
 
 Table schema於schema資料夾中的table.sql
 
+## 忘記密碼
+目前直接回傳之後可改用email傳遞
+
