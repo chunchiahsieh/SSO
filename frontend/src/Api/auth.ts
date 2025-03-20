@@ -19,11 +19,9 @@ export const login = async (dto: LoginDTO) => {
    const token = response.data.token;
    const decodedToken = jwtDecode(token);
    console.log(decodedToken); // 打印 Token 內容
-
-   // 儲存 Token 到 localStorage 或其他地方
    localStorage.setItem('token', token);
 
-   return {message : '',result:true};
+   return {message : '',result:true,token:response.data.token};
   } catch (error) {
     console.error("Login failed", error);
     // 處理登入失敗

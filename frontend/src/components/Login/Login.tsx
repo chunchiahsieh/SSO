@@ -9,7 +9,7 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate ,useLocation } from 'react-router-dom';
 import {login,LoginDTO} from '../../Api/auth';
 
 const theme = createTheme();
@@ -17,6 +17,8 @@ const theme = createTheme();
 export function Login() {
   const [errorMessage, setErrorMessage] = useState<string>(''); // 這裡要設置初始值，默認為空字串
   const navigate = useNavigate(); // 使用 useNavigate
+
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -27,15 +29,22 @@ export function Login() {
     };
     console.log(loginData);
      // 呼叫 login 函數並處理登入邏輯
-     const response = await login(loginData);
-    
-     if (response.result == true) {
-      setErrorMessage("");
-       // 登入成功，跳轉到儀表板頁面
-       navigate('/home');
+
+     const {message, result,token } = await login(loginData);
+
+       // **取得 `redirectUrl`，如果沒有則預設跳轉 `/home`**
+    const redirectUrl = new URLSearchParams(location.search).get("redirectUrl") || "/home";
+
+     if (result == true) {
+      if (redirectUrl.startsWith("http")) {
+        const url = token ? `${redirectUrl}?token=${encodeURIComponent(token)}` : redirectUrl;
+        window.location.href = url;
+      } else {
+        navigate(redirectUrl);
+      }
      } else {
        // 登入失敗，顯示錯誤訊息
-       setErrorMessage(response.message);
+       setErrorMessage(message);
      }
   };
 

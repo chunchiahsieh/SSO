@@ -9,7 +9,6 @@ namespace SSO.Data
         public DbSet<Users> Users { get; set; }
         public DbSet<Roles> Roles { get; set; }
         public DbSet<UserRoles> UserRoles { get; set; }
-
         public SSOContext(DbContextOptions<SSOContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
